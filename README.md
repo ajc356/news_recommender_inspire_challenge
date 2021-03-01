@@ -51,7 +51,7 @@ Once again, we go through several rounds of training, unfreezing the model and r
 
 With a final precision score of 96.5% our model is performing very well. Looking at the final model's confusion matrix, however, we see that much of this performance is still being driven by the majority ('no click') class. 26% of 'clicked' articles are still being mis-labelled as not clicked. While we have not prioritized recall as an evaluation metric, ideally in future work, we would be able to arrive at even higher scores than what we have produced here. One key element would be to take additional steps to ensure proportional class representation within FastAI's train-validation split within the classifier. This functionality is not built into the FastAI, however, with additional time, it would likely be possible to work around this using sklearn. 
 
-![](/Users/AmandaCheney/github/news_recommender_inspire_challenge/conf_matrix.png)
+![Classification Matrix](/Users/AmandaCheney/github/news_recommender_inspire_challenge/conf_matrix.png)
 
 ### Model Deployment & Monitoring 
 
