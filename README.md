@@ -4,24 +4,24 @@ Amanda Cheney
 
 March 1, 2021 
 
-#### Goal 
+### Goal 
 
 Construct a deep learning network using NLP techniques that is able to predict whether a user will click on an unseen news article. The model should take as input user-news items and output a binary variable (1/0).
 
-#### Data
+### Data 
 
 We are provided a dataset of nearly 11 million user-news interactions between 50,000 unique users and 51,282 unique articles. Each of these nearly 11 million user-news interactions, however, is not necessarily unique. EDA reveals that a given user may interact with a given news article more than once. In some cases the user may see an article once and click on it, but see the same article a second  time and not click on it (or vice-versa), or in the case of a few users, click on the same article over 300 times. For the purposes of this analysis, however, whether a user saw an article 300 times and clicked on it all 300 times or saw it 300 times and never clicked on it, all we are interested in is whether or not there was at least one click. Therefore, after grouping the data by `user_id` and `item` and summing the total number of clicks, I binarized a given user's total number of clicks into a simple 0 or 1 to serve as the target variable, `target` . This left me with a dataset of 5,894,984 unique user-item interaction combinations, nearly half the size of the original dataset, which I then merged with the news dataset for my final DataFrame. 
 
 EDA using Pandas revealed a notable class imbalance on the `target` variable. Only 19.5% of unique user-item interaction combinations result in a click, while over 80.5%  never result in a click. 
 
-#### Approach
+### Approach 
 
 1. <u>Training/Testing Methodology</u>: Before designing my model, I divided my data into train and test sets, while also ensuring that both sets reflected the roughly 80/20 class imbalance in the data. Later when we turn to building the classification model we will further divide the training data into train and validation sets, which is a function built into fast.ai's data block API - more on that below.
 2. <u>Preprocessing</u>: FastAI handles both tokenization and numericalization "under the hood" with one simple call using `TextList` which converts the text data of article titles and abstracts into a list of tokens and then convert those tokens into a numeric representation, or `databunch` which is then fed to the actual language model itself. 
 3. <u>Build and train deep learning network</u>: I used FastAI, a relatively new ML library built on top of PyTorch, known for its simple training approach as well as for providing state-of-the-art results in standard deep learning domains, including NLP, by enabling users to use utilize both transfer learning and self-supervised learning to fine-tune pertained language models. 
 4. <u>Evaluate model performance</u>: The 80/20 class imbalance has important implications for how we evaluate model performance. Most importantly, we should avoid relying on model accuracy alone, since accuracy applies a "naive" 50% threshold to decide between classes, and that is not applicable here. In the "worst case scenario", our model could simply predict the majority class all the time (i.e. no click) and have fairly high accuracy, but such a model wouldn't offer much insight into what we are actually interested in, which is ultimately those articles that do get clicks. In a business application, it would likely be the case  that **precision is the most important evaluation metric**. This is because precision punishes false positives while not caring about the rate of false negatives. Here, a false positive would be inaccurately labelling an article that was not clicked as clicked, which in the context of a news recommender would mean showing a user an article they do not want to see and are not going to click on, which could have negative effects on user engagement and customer churn. That said, this same type of model applied to a different context, however, such as one which aims at educating users and ensuring that they have access to as many of the relevant news items as possible, might instead choose to prioritize recall performance rather than precision. 
 
-#### Model Architecture 
+### Model Architecture 
 
 Building my deep learning network in FastAI involved two key stages. First, creating a "language model" and second, creating the actual classification model. 
 
@@ -55,7 +55,9 @@ With a final precision score of 96.5% our model is performing very well. Looking
 
 ![conf_matrix](/Users/AmandaCheney/Downloads/conf_matrix.png)
 
-#### Model Deployment & Monitoring
+
+
+### Model Deployment & Monitoring 
 
 While this exercise has focused on the development of a model to predict user-news interactions, in practice, development is only just the beginning a ML model's lifecycle. Once created, the next step is to put the model into production which includes not only deploying the model but also monitoring it. Some of these challenges include: computing power, portability, scalability, and language change. FastAI excels in terms of ease of use but, compared to say TensorFlow+Keras, is less mature and does not have the same native systems for deployment or levels of mobile or high scalability server capabilities. Deploying a fast.ai model has historically involved setting up and self-maintaining a customized inference solution (e.g., with Flask, which requires additional maintenance of security, load balancing, services orchestration, etc and is time consuming. However, newer tools like [TorchServe and Amazon SageMaker](https://aws.amazon.com/blogs/opensource/deploy-fast-ai-trained-pytorch-model-in-torchserve-and-host-in-amazon-sagemaker-inference-endpoint/) offer promising solutions for deploying FastAI/PyTorch models at scale and the opportunity to make real-time inferences via a REST API. 
 
@@ -63,7 +65,7 @@ Another key question to consider is how frequently do predictions need to be gen
 
 On the subject of model drift, this will be a key challenge in monitoring. Drift happens when the statistical properties of your data cases the quality of your predictions to change over time. In this case of our news recommender, as the content of current events change overtime, our model may not be as successful at predicting whether or not a user will click on a given news article. Successful monitoring of drift depends on how quickly you have access to the ground truth. Luckily, we do not need to wait weeks into the future to know if users do or do not click on an article, so monitoring performance with standard measure like accuracy, precision, recall and FBeta should be sufficient. Were we not to have timely labels, however, we would need to look at other methods. 
 
-#### Business Use Case - Final Thoughts 
+## Business Use Case - Final Thoughts 
 
 While the goal of this particular challenge was to build a deep learning model specifically, I will conclude by considering the question of whether or not a neural network is actually the best type of model for this particular application. The answer here will depend on whether the exact business use case  aims to optimize model interpretability or performance. If performance is the goal, then a neural network may indeed be the optimal choice. However, neutral networks are among the least interpretable models, as exactly what's going on under the hood to render this performance is within a black box that is not possible to understand. By contrast, if interpretability is the goal, then modeling techniques other than a neural network would be a more optimal choice.
 
