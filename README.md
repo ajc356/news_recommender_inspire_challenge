@@ -12,7 +12,7 @@ Construct a deep learning network using NLP techniques that is able to predict w
 
 We are provided a dataset of nearly 11 million user-news interactions between 50,000 unique users and 51,282 unique articles. Each of these nearly 11 million user-news interactions, however, is not necessarily unique. EDA reveals that a given user may interact with a given news article more than once. In some cases the user may see an article once and click on it, but see the same article a second  time and not click on it (or vice-versa), or in the case of a few users, click on the same article over 300 times. For the purposes of this analysis, however, whether a user saw an article 300 times and clicked on it all 300 times or saw it 300 times and never clicked on it, all we are interested in is whether or not there was at least one click. Therefore, after grouping the data by `user_id` and `item` and summing the total number of clicks, I binarized a given user's total number of clicks into a simple 0 or 1 to serve as the target variable, `target` . This left me with a dataset of 5,894,984 unique user-item interaction combinations, nearly half the size of the original dataset, which I then merged with the news dataset for my final DataFrame. 
 
-EDA using Pandas revealed a notable class imbalance on the `target` variable. Only 19.5% of unique user-item interaction combinations result in a click, while over 80.5%  never result in a click. 
+EDA using Pandas revealed a notable class imbalance on the `target` variable. Only 19.5% of unique user-item interaction combinations result in a click, while 80.5%  never result in a click. 
 
 ### Approach 
 
