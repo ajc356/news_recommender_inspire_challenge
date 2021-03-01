@@ -6,7 +6,7 @@ March 1, 2021
 
 ### Goal 
 
-Construct a deep learning network using NLP techniques that is able to predict whether a user will click on an unseen news article. The model should take as input user-news items and output a binary variable (1/0).
+Construct a deep learning network using NLP techniques that is able to predict whether a user will click on an unseen news article. The model should take as input user-news items and output a binary variable (1/0).   Additional details can be found in the [challenge prompt.](https://github.com/ajc356/news_recommender_inspire_challenge/blob/main/Prompt_Recommender_Data%20Challenge.pdf)
 
 ### Data 
 
